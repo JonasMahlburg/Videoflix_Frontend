@@ -1,0 +1,25 @@
+section{
+    background-image: url('/img/index_bg.jpg');
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+article{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    width: 605px;
+    height: 109px;
+}
+
+h1{
+    font-weight: 700;
+    font-style: bold;
+    font-size: 48px;
+}

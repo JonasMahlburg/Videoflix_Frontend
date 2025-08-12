@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'DM-sans';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/dm-sans-v15-latin-700.woff2'); 
+}/* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+
+body{
+    margin: 0;
+    font-family: 'DM-sans';
+}
+
