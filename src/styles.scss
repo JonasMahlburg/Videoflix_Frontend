@@ -11,5 +11,14 @@
 body{
     margin: 0;
     font-family: 'DM-sans';
+    color: white;
 }
+
+@mixin d-flex($d: flex, $js: center, $ai: center, $g: 0px, $fd: row) {
+    display: $d;
+    justify-content: $js;
+    align-items: $ai;
+    gap: $g;
+    flex-direction: $fd;
+  }
 
