@@ -1,0 +1,28 @@
+@import "../../../styles.scss";
+
+header{
+    position: absolute;
+    z-index: 2;
+    background-color: rgba($color: #000000, $alpha: 0.5);
+    @include d-flex($js: space-between);
+    width: 100%;
+    height: 108px;
+    img{
+        width: 200px;
+        height: 32px;
+    }
+    a{
+        @include d-flex();
+        background-color: #2E3EDF;
+        color: white;
+        border-radius: 40px;
+        border-color: #2E3EDF;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: 700;
+        width: 51px;
+        height: 23px;
+        gap: 10px;
+        text-decoration: none;
+    }
+}
