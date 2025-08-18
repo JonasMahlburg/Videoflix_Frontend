@@ -3,9 +3,20 @@
     <article>
         <h1>Movies, TV shows, and more</h1>
         <p>Enter your email to create or restart your subscription</p>
-        <form action="submit">
-            <input class="emailField" type="email" value="Email Address">
-        <input class="submit" type="submit" value="SignUp >">
+        <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+            <input class="emailField" type="email" name="email" placeholder="Email Address" ngModel required>
+        <button class="submit" type="submit">SignUp ></button>
         </form>
     </article>
 </section> 
+
+<!-- Toast -->
+<div class="toast" *ngIf="toastMessage" >
+  <div class="toast-status" [ngClass]="toastType"></div>
+  <div class="toast-content">
+    <img src="icons/error.svg" alt="icon" class="toast-icon">
+    <span class="toast-message">{{ toastMessage }}</span>
+  </div>
+  <div class="toast-divider"></div>
+  <button class="toast-close" (click)="toastMessage = null">X</button>
+</div>

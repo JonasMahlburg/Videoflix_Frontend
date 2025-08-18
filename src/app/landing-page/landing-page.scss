@@ -64,3 +64,59 @@ form{
     }
 
 }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 372px;
+  height: 42px;
+  padding: 24px 32px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  opacity: 0.9;
+  background-color: #2E3EDF;
+  z-index: 5;
+  @include d-flex($js: space-between);
+  /* Zusätzliche Anpassung: Das übergeordnete Element (der Toast) muss relativ positioniert sein, damit das Kind-Element (der Status) absolut dazu ausgerichtet wird. Das hast du bereits getan. */
+  
+  .toast-status{
+    position: absolute; /* Absolut positionieren */
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 15px; /* Eine schmale Leiste als Indikator */
+    border-top-left-radius: 20px; /* Abgerundete Ecken oben und unten links */
+    border-bottom-left-radius: 20px;
+    }
+
+    .toast-status.success {
+  background-color: #28a745;
+}
+
+.toast-status.error {
+  background-color: #dc3545;
+}
+
+    .toast-content{
+        @include d-flex($g:10px);
+    }
+}
+
+
+.toast-divider {
+  width: 4px;
+ background-color: white;
+  height: 100%;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  padding: 0 12px;
+  cursor: pointer;
+  line-height: 1;
+}
