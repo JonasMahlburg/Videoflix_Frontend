@@ -5,11 +5,9 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-landing-page',
-  // imports: [],
-  standalone: true,           // 👈 falls es eine Standalone-Komponente ist
+  standalone: true,           
   imports: [CommonModule, FormsModule], 
   templateUrl: './landing-page.html',
-  // styleUrl: './landing-page.scss',
   styleUrls: ['./landing-page.scss']  
 })
 export class LandingPage {
@@ -17,7 +15,6 @@ export class LandingPage {
   toastType: 'success' | 'error' | null = null;
 
   onSubmit() {
-    // Beispiel: Fake-Login (hier würdest du später deinen Service ansprechen)
     const loginSuccess = Math.random() > 0.5; // nur zum Testen
 
     if (loginSuccess) {
@@ -31,10 +28,9 @@ export class LandingPage {
     this.toastMessage = message;
     this.toastType = type;
 
-    // Nach 3 Sekunden Toast ausblenden
-  //   setTimeout(() => {
-  //     this.toastMessage = null;
-  //     this.toastType = null;
-  //   }, 3000);
+    setTimeout(() => {
+      this.toastMessage = null;
+      this.toastType = null;
+    }, 3000);
   }
 }

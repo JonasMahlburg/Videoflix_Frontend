@@ -12,11 +12,8 @@ section{
 }
 
 article{
+  @include d-flex($fd : column);
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     width: 670px;
     height: 189px;
     top: 355.5px;
@@ -76,6 +73,7 @@ form{
   color: white;
   font-weight: bold;
   opacity: 0.9;
+  animation: fadeInOut 3s forwards;
   background-color: #2E3EDF;
   z-index: 5;
   @include d-flex($js: space-between);
@@ -99,7 +97,19 @@ form{
   background-color: #dc3545;
 }
 
-    .toast-content{
+@keyframes fadeInOut {
+
+0% { opacity: 0; transform: translateY(20px); }
+
+10% { opacity: 1; transform: translateY(0); }
+
+90% { opacity: 1; transform: translateY(0); }
+
+100% { opacity: 0; transform: translateY(20px); }
+
+}
+
+.toast-content{
         @include d-flex($g:10px);
     }
 }
