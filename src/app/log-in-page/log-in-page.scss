@@ -1,0 +1,53 @@
+@import "../../styles.scss";
+
+section{
+    @include d-flex();
+    img{
+        @include bg()
+    }
+    .logInFrame{
+        @include frame()
+    }
+
+    .emailCorner{
+        input {
+                background: inherit;
+                border: 1px solid blue;
+                padding: 12px 24px;
+                width: 324px;
+                height: 24px;
+                color: white;
+                background-image: url('/icons/mail.png');
+                background-position: left;
+                background-repeat: no-repeat;
+        }
+    }
+    .passwordCorner{
+        @include d-flex();
+                input {
+                background: inherit;
+                border: 1px solid blue;
+                padding: 12px 24px;
+                width: 324px;
+                height: 24px;
+                color: white;
+                background-image: url('/icons/password.png');
+                background-position: left;
+                background-repeat: no-repeat;
+        }
+
+        .showPWIcon {
+            @include d-flex();
+            position: relative;
+            background-color: inherit;
+            border: none;
+            z-index: 2;
+            right: 30px;
+            img{
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+    }
+}

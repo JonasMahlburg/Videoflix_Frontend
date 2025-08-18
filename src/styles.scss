@@ -22,3 +22,19 @@ body{
     flex-direction: $fd;
   }
 
+@mixin frame($p: absolute, $bra: 48px, $pa: 15px){
+    @include d-flex($fd : column, $g: 32px);
+    position: $p;
+    z-index: 2;
+    border-radius: $bra;
+    border: 2px solid inherit;
+    background-color: #1C1A20CC;
+    padding: $pa;
+}
+
+@mixin bg($h: 100vh){
+    filter: brightness(50%);
+    width: 100%;
+    height: $h;
+    display: block;
+}

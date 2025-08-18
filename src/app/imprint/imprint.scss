@@ -23,5 +23,8 @@ section{
     a{
         text-decoration: none;
         color: white;
+        &:hover{
+            color: blue
+        }
     }
 }
