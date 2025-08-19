@@ -1,0 +1,25 @@
+<section>
+    <img src="img/sign_up_bg.jpg" alt="">
+    <article>
+        <h2>Sign up</h2>
+        <form class="signUpForm">
+            <p class="emailCorner">
+                <input type="email" placeholder="Email Adress" required>
+            </p>
+            <p class="passwordCorner">
+                <input type="password" placeholder="Enter a password" id="PwInput">
+                <button (click)="showPw()" class="showPWIcon">
+                    <img id="pwIcon" src="icons/visibility.svg" alt="Augen-Icon">
+                </button>
+            </p>
+            <p class="passwordCorner">
+                <input type="password" placeholder="Confirm password" id="PwCInput">
+                <button (click)="showPw()" class="showPWIcon">
+                    <img id="pwIcon" src="icons/visibility.svg" alt="Augen-Icon">
+                </button>
+            </p>
+            
+            <button type="submit">Get Started</button>
+        </form>
+    </article>
+</section>

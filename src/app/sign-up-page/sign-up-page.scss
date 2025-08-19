@@ -3,13 +3,15 @@
 section{
     @include d-flex();
     img{
-        @include bg()
+        @include bg();
     }
-    .logInFrame{
-        @include frame()
+    article{
+        @include frame();
     }
-
-    .emailCorner{
+    .signUpForm{
+        @include d-flex($fd: column);
+    }
+        .emailCorner{
         input {
                 background: inherit;
                 border: 1px solid blue;
@@ -52,46 +54,6 @@ section{
             img{
                 height: 20px; 
                 width: auto;
-            }
-        }
-    }
-
-    /* Anpassungen für den Log-In Button */
-    form{
-        .btnCorner{
-            @include d-flex()
-        }
-        .logIn {
-                @include d-flex(); 
-                background-color: #2E3EDF;
-                color: white;
-                border-radius: 40px;
-                border: 1px solid #2E3EDF;
-                padding: 12px 24px;
-                font-size: 18px;
-                font-weight: 700;
-                width: 30%;
-                height: auto;
-                text-decoration: none;
-            }
-    } 
-
-
-    .linksPart{
-        @include d-flex($fd: column);
-        .pwForget{
-            color: white;
-            text-decoration: none;
-            &:hover{
-                color: #2E3EDF;
-            }
-        }
-        .signUp{
-            color: white;
-            text-decoration: none;
-            font-weight: bolder;
-            &:hover{
-                color: #2E3EDF;
             }
         }
     }
