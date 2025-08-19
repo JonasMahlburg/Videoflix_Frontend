@@ -22,9 +22,12 @@ section{
                 background-repeat: no-repeat;
         }
     }
+
     .passwordCorner{
-        @include d-flex();
-                input {
+        position: relative;
+        display: block;
+        
+        input {
                 background: inherit;
                 border: 1px solid blue;
                 padding: 12px 24px;
@@ -37,17 +40,59 @@ section{
         }
 
         .showPWIcon {
-            @include d-flex();
-            position: relative;
-            background-color: inherit;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 15px; 
+            background-color: transparent;
             border: none;
+            cursor: pointer;
             z-index: 2;
-            right: 30px;
+            padding: 0; 
             img{
-                height: 100%;
-                width: 100%;
+                height: 20px; 
+                width: auto;
             }
         }
+    }
 
+    /* Anpassungen für den Log-In Button */
+    form{
+        .btnCorner{
+            @include d-flex()
+        }
+        .logIn {
+                @include d-flex(); // Zentriert den Text im Button
+                background-color: #2E3EDF;
+                color: white;
+                border-radius: 40px;
+                border: 1px solid #2E3EDF; // border-color zu border geändert
+                padding: 12px 24px;
+                font-size: 18px;
+                font-weight: 700;
+                width: 50%; // Der Button soll die volle Breite der Form einnehmen
+                height: auto; // Automatische Höhe basierend auf dem Inhalt und Padding
+                text-decoration: none;
+            }
+    } 
+
+
+    .linksPart{
+        @include d-flex($fd: column);
+        .pwForget{
+            color: white;
+            text-decoration: none;
+            &:hover{
+                color: #2E3EDF;
+            }
+        }
+        .signUp{
+            color: white;
+            text-decoration: none;
+            font-weight: bolder;
+            &:hover{
+                color: #2E3EDF;
+            }
+        }
     }
 }
