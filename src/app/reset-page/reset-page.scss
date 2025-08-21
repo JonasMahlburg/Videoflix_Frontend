@@ -7,8 +7,18 @@ section{
     }
     article{
         @include frame();
+        .note{
+            width: 408px;
+            height: 46px;
+            font-size: 18px;
+            @include d-flex();
+
+            a{
+                text-decoration: none;
+            }
+        }
     }
-    .signUpForm{
+    .resetForm{
         @include d-flex($fd: column);
     }
         .emailCorner{
@@ -58,13 +68,13 @@ section{
         }
     }
 
-        form{
+            form{
         .btnCorner{
             @include d-flex();
             width: 408px;
             height: 48px;
         }
-        .signBtn {
+        .resetBtn {
                 @include d-flex(); 
                 background-color: #2E3EDF;
                 color: white;
@@ -75,6 +85,9 @@ section{
                 font-weight: 700;
                 text-decoration: none;
                 cursor: pointer;
+                :invalid{
+                    background-color: lightgray;
+                }
             }
     } 
 }

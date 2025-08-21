@@ -1,0 +1,40 @@
+<section>
+    <img src="img/sign_up_bg.jpg" alt="Hintergrund">
+    <article>
+        <h2>Reset password</h2>
+        <p class="note">Create a new password for your <a href="#landing-page">Videoflix </a> acount</p>
+        <form #signupForm="ngForm" class="resetFrame">
+            <p class="passwordCorner">
+                <input 
+                    type="password" 
+                    placeholder="Enter a password" 
+                    id="PwInput" 
+                    name="password" 
+                    ngModel 
+                    required>
+                <button type="button" (click)="togglePasswordVisibility('PwInput', 'pwIcon')" class="showPWIcon">
+                    <img id="pwIcon" src="icons/visibility.svg" alt="Augen-Icon">
+                </button>
+            </p>
+            <p class="passwordCorner">
+                <input 
+                    type="password" 
+                    placeholder="Confirm password" 
+                    id="PwCInput" 
+                    name="confirmPassword" 
+                    ngModel 
+                    required>
+                <button type="button" (click)="togglePasswordVisibility('PwCInput', 'pwCIcon')" class="showPWIcon">
+                    <img id="pwCIcon" src="icons/visibility.svg" alt="Augen-Icon">
+                </button>
+            </p>
+            <p class="btnCorner">
+                            <button 
+                type="submit" 
+                [disabled]="!signupForm.valid" class="resetBtn">
+                Reset my password
+            </button>
+            </p>
+        </form>
+    </article>
+</section>
