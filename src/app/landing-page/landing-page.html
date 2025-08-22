@@ -3,7 +3,7 @@
     <article>
         <h1>Movies, TV shows, and more</h1>
         <p>Enter your email to create or restart your subscription</p>
-        <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
             <input class="emailField" type="email" name="email" placeholder="Email Address" ngModel required>
         <button class="submit" type="submit">SignUp ></button>
         </form>

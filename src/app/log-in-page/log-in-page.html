@@ -2,17 +2,17 @@
     <img src="img/logIn.jpg" alt="">
     <article class="logInFrame">
          <h2>Log In</h2>
-        <form>
+        <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)">
             <p class="emailCorner">
-                <input type="email" placeholder="Email Address" required>
+                <input type="email" placeholder="Email Address" name="email" ngModel required>
             </p>
             <p class="passwordCorner">
-                <input id="PwInput" type="password" placeholder="Password" required>
-                <button (click)="showPw()" class="showPWIcon">
+                <input id="PwInput" type="password" placeholder="Password" name="password" ngModel required>
+                <button (click)="showPw()" class="showPWIcon" type="button">
                     <img id="pwIcon" src="icons/visibility.svg" alt="Augen-Icon">
                 </button>
             </p>
-            <p class="btnCorner"><button type="submit" class="logIn">Log In</button></p>
+            <p class="btnCorner"><button type="submit" class="logIn" [disabled]="loginForm.invalid">Log In</button></p>
         </form>
         <article class="linksPart">
             <p>
@@ -24,3 +24,13 @@
         </article>
     </article>
 </section>
+
+<div class="toast" *ngIf="toastMessage" >
+  <div class="toast-status" [ngClass]="toastType"></div>
+  <div class="toast-content">
+    <img [src]="toastType === 'success' ? 'icons/success.svg' : 'icons/error.svg'" alt="icon" class="toast-icon">
+    <span class="toast-message">{{ toastMessage }}</span>
+  </div>
+  <div class="toast-divider"></div>
+  <button class="toast-close" (click)="toastMessage = null">X</button>
+</div>

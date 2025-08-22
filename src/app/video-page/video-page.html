@@ -1,0 +1,10 @@
+<section [style.background-image]="'url(' + featuredVideo?.thumbnail_url + ')'">
+    <article class="videoPreview">
+        <article class="videoPreviewInfo">
+            <h1 class="videoTitle">{{ featuredVideo?.title }}</h1>
+            <p class="videoDescription">{{ featuredVideo?.description }}</p>
+            <p class="videoCategory">{{ featuredVideo?.category}}</p>
+            <button class="playBtn">Play</button>
+        </article>
+    </article>
+</section>

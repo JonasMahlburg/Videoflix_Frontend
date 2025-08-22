@@ -5,34 +5,24 @@ section{
     img{
         @include bg();
     }
-    article{
-        @include frame();
-        .note{
-            width: 408px;
-            height: 46px;
-            font-size: 18px;
-            @include d-flex();
-
-            a{
-                text-decoration: none;
+        .Frame {
+            @include frame();
+    
+            .description {
+                @include d-flex();
+                width: 408px;
+                height: 46px;
+                font-size: 18px;
+    
+                a {
+                    text-decoration: none;
+                }
             }
         }
-    }
-    .resetForm{
+
+
+    .resetFrame{
         @include d-flex($fd: column);
-    }
-        .emailCorner{
-        input {
-                background: inherit;
-                border: 1px solid blue;
-                padding: 12px 24px;
-                width: 324px;
-                height: 24px;
-                color: white;
-                background-image: url('/icons/mail.png');
-                background-position: left;
-                background-repeat: no-repeat;
-        }
     }
 
     .passwordCorner{

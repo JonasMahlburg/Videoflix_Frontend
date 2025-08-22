@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { LandingPage } from './landing-page/landing-page';
+import { VideoPage } from './video-page/video-page';
 import { Imprint } from './imprint/imprint';
 import { LogInPage } from './log-in-page/log-in-page';
 import { SignUpPage } from './sign-up-page/sign-up-page';
@@ -11,5 +12,6 @@ export const routes: Routes = [
     {path: 'login', component: LogInPage},
     {path: 'signUp', component: SignUpPage},
     {path: 'reset_pw', component: ResetPage},
+    {path: 'videos', component: VideoPage},
 
 ];
