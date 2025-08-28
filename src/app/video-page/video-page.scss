@@ -43,17 +43,24 @@ section {
             }
 
             .playBtn {
-                background-color: #2E3EDF; /* Netflix-ähnliche Farbe */
+                background-color: #2E3EDF;
+                background-image: url('../../../public/icons/play_arrow.svg');
+                background-position: left center;
+                background-repeat: no-repeat;
+                background-origin: content-box;
                 color: white;
-                border: none;
+                border: 1px solid #2E3EDF;
                 padding: 12px 24px;
-                font-size: 1.1rem;
+                font-size: 18px;
+                font-weight: 700;
+                width: 30%;
+                height: auto;
                 cursor: pointer;
-                border-radius: 5px;
+                border-radius: 40px;
                 transition: background-color 0.3s ease;
 
                 &:hover {
-                    background-color: #2E3EDF;
+                    background-color: #858deb;
                 }
             }
         }
