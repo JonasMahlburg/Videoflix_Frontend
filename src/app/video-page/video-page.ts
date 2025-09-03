@@ -1,10 +1,10 @@
 // src/app/video-page/video-page.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { VideoService } from '../video'; // Importiere den neuen Service
 import { ActivatedRoute } from '@angular/router'; // Importiere ActivatedRoute, falls du einen Resolver nutzt
-
+import videojs from 'video.js';
 
 export interface Video {
     id: number;
@@ -23,12 +23,15 @@ export interface Video {
     templateUrl: './video-page.html',
     styleUrls: ['./video-page.scss']
 })
-export class VideoPage implements OnInit {
+export class VideoPage implements OnInit, OnDestroy {
     videos: Video[] = [];
     featuredVideo: Video | null = null;
     safeFeaturedVideoUrl: SafeResourceUrl | null = null;
     isLoading = true;
     error: string | null = null;
+    isVideoVisible: boolean = false;
+    private player!: any;
+    @ViewChild('videoPlayer') videoPlayer!: ElementRef;
 
     constructor(
         private sanitizer: DomSanitizer,
@@ -37,22 +40,29 @@ export class VideoPage implements OnInit {
     ) {}
 
     ngOnInit(): void {
-      // Methode A: Daten über den Service laden (ohne Resolver)
-      // this.videoService.loadVideos().subscribe(
-      //   data => {
-      //     this.handleVideoData(data);
-      //   },
-      //   err => {
-      //     console.error('Fehler beim Abrufen der Videos', err);
-      //     this.error = 'Videos konnten nicht geladen werden.';
-      //     this.isLoading = false;
-      //   }
-      // );
-      
-      // Methode B: Daten vom Resolver erhalten (empfohlen)
       this.route.data.subscribe(({ videos }) => {
         this.handleVideoData(videos);
       });
+    }
+
+    playVideo(): void {
+      this.isVideoVisible = true;
+      setTimeout(() => {
+        if (this.videoPlayer && this.videoPlayer.nativeElement) {
+          this.player = videojs(this.videoPlayer.nativeElement, {}, function onPlayerReady() {
+            videojs.log('Your player is ready!');
+          });
+          this.player.on('ended', () => {
+            videojs.log('Awww...over so soon?!');
+          });
+        }
+      });
+    }
+
+    ngOnDestroy(): void {
+      if (this.player) {
+        this.player.dispose();
+      }
     }
 
     private handleVideoData(data: Video[]): void {

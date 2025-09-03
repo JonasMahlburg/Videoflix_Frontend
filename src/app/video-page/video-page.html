@@ -4,11 +4,37 @@
             <h1 class="videoTitle">{{ featuredVideo?.title }}</h1>
             <p class="videoDescription">{{ featuredVideo?.description }}</p>
             <p class="videoCategory">{{ featuredVideo?.category}}</p>
-            <button class="playBtn w3-animate-opacity	">Play</button>
+            <button class="playBtn w3-animate-opacity" (click)="playVideo()">Play</button>
         </article>
     </article>
+        <ng-container *ngIf="isVideoVisible">
+          <video
+            #videoPlayer
+            id="my-player"
+            class="video-js"
+            controls
+            preload="auto"
+            [poster]="featuredVideo?.thumbnail_url"
+            data-setup='{}'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a
+              web browser that
+              <a href="https://videojs.com/html5-video-support/" target="_blank">
+                supports HTML5 video
+              </a>
+            </p>
+          </video>
+        </ng-container>
 </section>
 <section class="videoCollection">
     <p>New to Videoflix</p>
-    
+    @for(video of videos; track video.id){
+        <div class="otherVideos" [style.background-image]="'url(' + video.thumbnail_url + ')'">
+            <div class="otherVideosDesc">
+                <p>{{video.title}}</p>
+                <p>{{video.description}}</p>
+            </div>
+        </div>
+    }
+
 </section>
