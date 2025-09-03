@@ -6,13 +6,20 @@ import { LogInPage } from './log-in-page/log-in-page';
 import { SignUpPage } from './sign-up-page/sign-up-page';
 import { ResetPage } from './reset-page/reset-page';
 import { ForgotPage } from './forgot-page/forgot-page';
+import { VideoPreloadResolver } from './video-preload-resolver';
 
 export const routes: Routes = [
-    {path: '', component: LandingPage},
-    {path: 'impressum', component: Imprint},
-    {path: 'login', component: LogInPage},
-    {path: 'signUp', component: SignUpPage},
-    {path: 'reset_pw', component: ResetPage},
-    {path: 'videos', component: VideoPage},
-    {path: 'forgot_pw', component: ForgotPage},
+    { path: '', component: LandingPage },
+    { path: 'impressum', component: Imprint },
+    { path: 'login', component: LogInPage },
+    { path: 'signUp', component: SignUpPage },
+    { path: 'reset_pw', component: ResetPage },
+    { 
+      path: 'videos', 
+      component: VideoPage,
+      resolve: {
+        videos: VideoPreloadResolver // Füge den Resolver hinzu
+      }
+    },
+    { path: 'forgot_pw', component: ForgotPage },
 ];
