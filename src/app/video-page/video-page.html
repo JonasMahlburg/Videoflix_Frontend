@@ -28,6 +28,7 @@
 </section>
 <section class="videoCollection">
     <p>New to Videoflix</p>
+    <div class="newVideos">
     @for(video of videos; track video.id){
         <div class="otherVideos" [style.background-image]="'url(' + video.thumbnail_url + ')'">
             <div class="otherVideosDesc">
@@ -36,5 +37,7 @@
             </div>
         </div>
     }
+    </div>
+
 
 </section>
