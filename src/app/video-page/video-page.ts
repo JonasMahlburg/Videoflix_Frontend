@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import Hls from 'hls.js';
-import { ActivatedRoute } from '@angular/router'; // Wichtig: ActivatedRoute importieren
+import { ActivatedRoute } from '@angular/router';
 import { VideoService } from '../services/video.service';
 import { UniqueCategoriesPipe } from '../pipes/unique-categories-pipe';
 import { FilterByCategoryPipe } from '../pipes/filter-by-category-pipe';
 
+// Schnittstelle ohne die Video-URL-Eigenschaften
 export interface Video {
     id: number;
     title: string;
@@ -15,10 +16,6 @@ export interface Video {
     thumbnail_url: string;
     category: string;
     created_at: string;
-    video_file: string;
-    video_480p?: string;
-    video_720p?: string;
-    video_1080p?: string;
 }
 
 @Component({
@@ -49,7 +46,7 @@ export class VideoPageComponent implements OnInit, OnDestroy {
 
     constructor(
         private sanitizer: DomSanitizer,
-        private route: ActivatedRoute // Füge ActivatedRoute zum Constructor hinzu
+        private route: ActivatedRoute
     ) {}
 
     ngOnInit(): void {
@@ -80,7 +77,7 @@ export class VideoPageComponent implements OnInit, OnDestroy {
         
         const videoElement = this.videoPlayer.nativeElement;
         const video = this.videos.find(v => v.id === id);
-        if (!video || !video.video_480p) {
+        if (!video) {
             console.error('Video or URL not found');
             return;
         }
@@ -154,13 +151,15 @@ export class VideoPageComponent implements OnInit, OnDestroy {
         this.latestVideos = this.videos.filter(v => new Date(v.created_at) >= fiveDaysAgo);
     }
 
+    /**
+     * Erstellt die Video-URL dynamisch basierend auf der Video-ID.
+     */
     private getBestResolutionUrl(video: Video, resolution: string = '1080p'): string {
-        switch (resolution) {
-            case '1080p': return video.video_1080p || video.video_720p || video.video_480p || '';
-            case '720p': return video.video_720p || video.video_480p || '';
-            case '480p': return video.video_480p || '';
-            default: return '';
-        }
+        // Annahme, dass die Basis-URL und die Pfadstruktur fest sind.
+        const baseUrl = 'http://127.0.0.1:8000/media/hls/';
+        // Verweis auf die HLS-Manifestdatei (.m3u8), nicht auf ein einzelnes Segment (.ts)
+        const path = `${video.id}/${resolution}/index.m3u8`;
+        return `${baseUrl}${path}`;
     }
 
     private destroyHlsPlayers(): void {
