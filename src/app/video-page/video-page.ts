@@ -1,83 +1,180 @@
-// src/app/video-page/video-page.component.ts
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { VideoService } from '../video'; // Importiere den neuen Service
-import { ActivatedRoute } from '@angular/router'; // Importiere ActivatedRoute, falls du einen Resolver nutzt
-import videojs from 'video.js';
+import { FormsModule } from '@angular/forms';
+import Hls from 'hls.js';
+import { ActivatedRoute } from '@angular/router'; // Wichtig: ActivatedRoute importieren
+import { VideoService } from '../services/video.service';
+import { UniqueCategoriesPipe } from '../pipes/unique-categories-pipe';
+import { FilterByCategoryPipe } from '../pipes/filter-by-category-pipe';
 
 export interface Video {
     id: number;
-    created_at: string;
     title: string;
     description: string;
-    thumbnail_url: string; 
+    thumbnail_url: string;
     category: string;
-    videoUrl: string;
+    created_at: string;
+    video_file: string;
+    video_480p?: string;
+    video_720p?: string;
+    video_1080p?: string;
 }
 
 @Component({
     selector: 'app-video-page',
     standalone: true,
-    imports: [CommonModule],
+    imports: [
+        CommonModule,
+        FormsModule, 
+        UniqueCategoriesPipe,
+        FilterByCategoryPipe
+    ],
     templateUrl: './video-page.html',
     styleUrls: ['./video-page.scss']
 })
-export class VideoPage implements OnInit, OnDestroy {
+export class VideoPageComponent implements OnInit, OnDestroy {
+    @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+    @ViewChild('overlayVideo') overlayVideo!: ElementRef<HTMLVideoElement>;
+    
     videos: Video[] = [];
+    latestVideos: Video[] = [];
     featuredVideo: Video | null = null;
-    safeFeaturedVideoUrl: SafeResourceUrl | null = null;
-    isLoading = true;
-    error: string | null = null;
-    isVideoVisible: boolean = false;
-    private player!: any;
-    @ViewChild('videoPlayer') videoPlayer!: ElementRef;
+    currentVideoId: number | null = null;
+    currentResolution: string = '480p';
+    isVideoOverlayOpen: boolean = false;
+
+    private hls: Hls | null = null;
+    private overlayHls: Hls | null = null;
 
     constructor(
         private sanitizer: DomSanitizer,
-        private videoService: VideoService, // Nutze den Service anstelle von HttpClient
-        private route: ActivatedRoute // Für den Resolver-Ansatz
+        private route: ActivatedRoute // Füge ActivatedRoute zum Constructor hinzu
     ) {}
 
     ngOnInit(): void {
-      this.route.data.subscribe(({ videos }) => {
-        this.handleVideoData(videos);
-      });
-    }
-
-    playVideo(): void {
-      this.isVideoVisible = true;
-      setTimeout(() => {
-        if (this.videoPlayer && this.videoPlayer.nativeElement) {
-          this.player = videojs(this.videoPlayer.nativeElement, {}, function onPlayerReady() {
-            videojs.log('Your player is ready!');
-          });
-          this.player.on('ended', () => {
-            videojs.log('Awww...over so soon?!');
-          });
-        }
-      });
+        this.route.data.subscribe(({ videos }) => {
+            if (videos) {
+                this.videos = videos;
+                this.getNewestVideos();
+                if (this.videos.length > 0) {
+                    this.selectVideo(this.videos[0].id);
+                }
+            }
+        });
     }
 
     ngOnDestroy(): void {
-      if (this.player) {
-        this.player.dispose();
-      }
+        this.destroyHlsPlayers();
     }
 
-    private handleVideoData(data: Video[]): void {
-      this.videos = data;
-      if (this.videos.length > 0) {
-          this.selectVideo(this.videos[0]);
-      }
-      this.isLoading = false;
+    selectVideo(id: number): void {
+        this.currentVideoId = id;
+        this.featuredVideo = this.videos.find(v => v.id === id) || null;
     }
 
-    /**
-     * Wählt ein Video aus, das im Hauptplayer angezeigt wird
-     */
-    selectVideo(video: Video): void {
-        this.featuredVideo = video;
-        this.safeFeaturedVideoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(video.videoUrl);
+    playVideoInMainPlayer(id: number, resolution: string): void {
+        if (this.hls) {
+            this.hls.destroy();
+        }
+        
+        const videoElement = this.videoPlayer.nativeElement;
+        const video = this.videos.find(v => v.id === id);
+        if (!video || !video.video_480p) {
+            console.error('Video or URL not found');
+            return;
+        }
+
+        const videoUrl = this.getBestResolutionUrl(video);
+        
+        this.hls = new Hls({
+            startLevel: -1, 
+            startFragPrefetch: true,
+            fragLoadingTimeOut: 10000,
+            fragLoadingMaxRetry: 3,
+        });
+        this.hls.loadSource(videoUrl);
+        this.hls.attachMedia(videoElement);
+        
+        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+             videoElement.play().catch(e => console.log("Play failed:", e));
+        });
+    }
+
+    openVideoOverlay(): void {
+        this.isVideoOverlayOpen = true;
+        document.body.classList.add('overlay-open');
+        this.loadVideoInOverlay(this.currentVideoId, this.currentResolution);
+    }
+    
+    closeVideoOverlay(): void {
+        this.isVideoOverlayOpen = false;
+        document.body.classList.remove('overlay-open');
+        if (this.overlayHls) {
+            this.overlayHls.destroy();
+            this.overlayHls = null;
+        }
+    }
+
+    handleResolutionChange(event: any): void {
+        this.currentResolution = event.target.value;
+        this.loadVideoInOverlay(this.currentVideoId, this.currentResolution);
+    }
+
+    loadVideoInOverlay(id: number | null, resolution: string): void {
+        if (!id) return;
+        
+        if (this.overlayHls) {
+            this.overlayHls.destroy();
+        }
+
+        const videoElement = this.overlayVideo.nativeElement;
+        const video = this.videos.find(v => v.id === id);
+        if (!video) return;
+
+        const videoUrl = this.getBestResolutionUrl(video, resolution);
+
+        this.overlayHls = new Hls({
+            startLevel: -1, 
+            startFragPrefetch: true,
+            fragLoadingTimeOut: 10000,
+            fragLoadingMaxRetry: 3,
+        });
+        this.overlayHls.loadSource(videoUrl);
+        this.overlayHls.attachMedia(videoElement);
+        
+        this.overlayHls.on(Hls.Events.MANIFEST_PARSED, () => {
+             videoElement.play().catch(e => console.log("Play failed:", e));
+        });
+    }
+
+    private getNewestVideos(): void {
+        const fiveDaysAgo = new Date();
+        fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
+        this.latestVideos = this.videos.filter(v => new Date(v.created_at) >= fiveDaysAgo);
+    }
+
+    private getBestResolutionUrl(video: Video, resolution: string = '1080p'): string {
+        switch (resolution) {
+            case '1080p': return video.video_1080p || video.video_720p || video.video_480p || '';
+            case '720p': return video.video_720p || video.video_480p || '';
+            case '480p': return video.video_480p || '';
+            default: return '';
+        }
+    }
+
+    private destroyHlsPlayers(): void {
+        if (this.hls) {
+            this.hls.destroy();
+            this.hls = null;
+        }
+        if (this.overlayHls) {
+            this.overlayHls.destroy();
+            this.overlayHls = null;
+        }
+    }
+
+    getSafeUrl(url: string | undefined): SafeResourceUrl {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(url || '');
     }
 }

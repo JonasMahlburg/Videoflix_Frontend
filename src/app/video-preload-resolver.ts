@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { Observable } from 'rxjs';
-import { VideoService } from './video';
+import { VideoService } from './services/video.service';
 import { Video } from './video-page/video-page';
 
 @Injectable({

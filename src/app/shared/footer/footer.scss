@@ -6,7 +6,7 @@ footer{
     height: 108px;
     bottom: 0;
     gap: 40px;
-    position: absolute;
+    position: sticky;
     z-index: 2;
     background-color: rgba($color: #000000, $alpha: 0.5);
     backdrop-filter: blur(8px);

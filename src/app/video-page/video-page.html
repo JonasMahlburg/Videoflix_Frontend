@@ -1,43 +1,61 @@
-<section [style.background-image]="'url(' + featuredVideo?.thumbnail_url + ')'">
-    <article class="videoPreview">
-        <article class="videoPreviewInfo">
-            <h1 class="videoTitle">{{ featuredVideo?.title }}</h1>
-            <p class="videoDescription">{{ featuredVideo?.description }}</p>
-            <p class="videoCategory">{{ featuredVideo?.category}}</p>
-            <button class="playBtn w3-animate-opacity" (click)="playVideo()">Play</button>
+<main class="w_full d_flex_ss_gl font_white_color">
+    <section class="preview_section">
+        <div class="preview_section_video">
+            <video #videoPlayer autoplay muted loop></video>
+            <div class="preview_section_video_overlay"></div>
+        </div>
+        <article *ngIf="featuredVideo">
+            <h1>{{ featuredVideo.title }}</h1>
+            <p>{{ featuredVideo.description }}</p>
+            <button class="std_btn btn_prime pad_s d_flex_cc_gs" (click)="openVideoOverlay()">
+                <img src="../../../public/icons/play_arrow.svg" alt="">
+                Play
+            </button>
         </article>
-    </article>
-        <ng-container *ngIf="isVideoVisible">
-          <video
-            #videoPlayer
-            id="my-player"
-            class="video-js"
-            controls
-            preload="auto"
-            [poster]="featuredVideo?.thumbnail_url"
-            data-setup='{}'>
-            <p class="vjs-no-js">
-              To view this video please enable JavaScript, and consider upgrading to a
-              web browser that
-              <a href="https://videojs.com/html5-video-support/" target="_blank">
-                supports HTML5 video
-              </a>
-            </p>
-          </video>
-        </ng-container>
-</section>
-<section class="videoCollection">
-    <p>New to Videoflix</p>
-    <div class="newVideos">
-    @for(video of videos; track video.id){
-        <div class="otherVideos" [style.background-image]="'url(' + video.thumbnail_url + ')'">
-            <div class="otherVideosDesc">
-                <p>{{video.title}}</p>
-                <p>{{video.description}}</p>
+    </section>
+
+    <section class="list_section">
+        <section class="video_list">
+            <h2>New on Videoflix</h2>
+            <div class="scroll-wrapper">
+                <ul id="newest">
+                    <li *ngFor="let video of latestVideos" (click)="selectVideo(video.id)">
+                        <img [src]="video.thumbnail_url" [alt]="video.title">
+                    </li>
+                    <li *ngIf="!latestVideos.length" style="font-style: italic">No new videos available.</li>
+                </ul>
+            </div>
+        </section>
+        <section class="video_list" *ngFor="let category of videos | uniqueCategories">
+            <h2>{{ category }}</h2>
+            <div class="scroll-wrapper">
+                <ul>
+                    <li *ngFor="let video of videos | filterByCategory:category" (click)="selectVideo(video.id)">
+                        <img [src]="video.thumbnail_url" [alt]="video.title">
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </section>
+
+    <div class="video-overlay" [style.display]="isVideoOverlayOpen ? 'flex' : 'none'">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <img src="../../../public/icons/arrow_back.svg" (click)="closeVideoOverlay()" alt="">
+                <h1>{{ featuredVideo?.title }}</h1>
+                <img src="../../../public/icons/logo_icon_small.svg" alt="">
+            </div>
+            <div class="video-wrapper">
+                <video #overlayVideo controls autoplay></video>
+            </div>
+            <div class="overlay-controls">
+                <label for="setResolution">Resolution:</label>
+                <select id="setResolution" [ngModel]="currentResolution" (change)="handleResolutionChange($event)">
+                    <option value="480p">480p</option>
+                    <option value="720p">720p</option>
+                    <option value="1080p">1080p</option>
+                </select>
             </div>
         </div>
-    }
     </div>
-
-
-</section>
+</main>
