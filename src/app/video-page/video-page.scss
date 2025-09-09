@@ -1,4 +1,4 @@
-// video-page.scss
+@import "../../styles.scss";
 
 .main_header {
     z-index: 1;
@@ -8,6 +8,21 @@ main {
     z-index: 0;
     position: relative;
     padding: 0 !important;
+
+    .playBtn{
+        @include d-flex();
+        background-color: #2E3EDF;
+        color: white;
+        border-radius: 40px;
+        border-color: #2E3EDF;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: 700;
+        width: 51px;
+        height: 23px;
+        gap: 10px;
+        text-decoration: none;
+    }
 }
 
 .preview_section {
@@ -51,7 +66,6 @@ main {
         position: relative;
         z-index: 2;
         height: 400px;
-        width: 400px;
         display: flex;
         gap: 16px;
         flex-direction: column;
@@ -61,9 +75,17 @@ main {
         margin: 20px;
         margin-left: max(48px, calc(50% - 672px));
         margin-right: auto;
+        background-size: cover;
+
 
         > button {
-            width: 128px;
+            padding: 12px 24px;
+            width: 113px;
+            height: 48px;
+            border-radius: 40px;
+            cursor: pointer;
+            
+
         }
     }
 }
@@ -116,8 +138,10 @@ main {
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
-    img:first-child {
+    img {
         cursor: pointer;
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -206,6 +230,7 @@ main {
     z-index: 1;
     overflow: hidden;
     padding: 0 max(48px, calc(50% - 720px));
+    background: linear-gradient(180deg, rgba(20, 20, 20, 1) 0%, rgba(20, 20, 20, 0.4) 50%, rgba(20, 20, 20, 1) 100%);
 }
 
 .video_list {

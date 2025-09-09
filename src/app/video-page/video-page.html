@@ -1,18 +1,18 @@
 <main class="w_full d_flex_ss_gl font_white_color">
-    <section class="preview_section">
-        <div class="preview_section_video">
-            <video #videoPlayer autoplay muted loop></video>
-            <div class="preview_section_video_overlay"></div>
-        </div>
-        <article *ngIf="featuredVideo">
-            <h1>{{ featuredVideo.title }}</h1>
-            <p>{{ featuredVideo.description }}</p>
-            <button class="std_btn btn_prime pad_s d_flex_cc_gs" (click)="openVideoOverlay()">
-                <img src="../../../public/icons/play_arrow.svg" alt="">
-                Play
-            </button>
-        </article>
-    </section>
+<section class="preview_section">
+    <div class="preview_section_video">
+        <video #videoPlayer autoplay muted loop></video>
+        <div class="preview_section_video_overlay"></div>
+    </div>
+    <article *ngIf="featuredVideo"  [style.backgroundImage]="'url(' + featuredVideo.thumbnail_url + ')'">
+        <h1>{{ featuredVideo.title }}</h1>
+        <p>{{ featuredVideo.description }}</p>
+        <button class="playBtn" (click)="openVideoOverlay()">
+            <img src="/icons/play_arrow.svg" alt="">
+            Play
+        </button>
+    </article>
+</section>
 
     <section class="list_section">
         <section class="video_list">
@@ -41,9 +41,9 @@
     <div class="video-overlay" [style.display]="isVideoOverlayOpen ? 'flex' : 'none'">
         <div class="overlay-content">
             <div class="overlay-header">
-                <img src="../../../public/icons/arrow_back.svg" (click)="closeVideoOverlay()" alt="">
+                <img src="/icons/arrow_back.svg" (click)="closeVideoOverlay()" alt="">
                 <h1>{{ featuredVideo?.title }}</h1>
-                <img src="../../../public/icons/logo_icon_small.svg" alt="">
+                <img src="/icons/logo_icon_small.svg" alt="">
             </div>
             <div class="video-wrapper">
                 <video #overlayVideo controls autoplay></video>

@@ -4,7 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import Hls from 'hls.js';
 import { ActivatedRoute } from '@angular/router';
-import { VideoService } from '../services/video.service';
+// import { VideoService } from '../services/video.service';
 import { UniqueCategoriesPipe } from '../pipes/unique-categories-pipe';
 import { FilterByCategoryPipe } from '../pipes/filter-by-category-pipe';
 
