@@ -1,10 +1,10 @@
 <main class="w_full d_flex_ss_gl font_white_color">
 <section class="preview_section">
-    <div class="preview_section_video">
+    <div class="preview_section_video" [style.backgroundImage]="'url(' + featuredVideo?.thumbnail_url + ')'">
         <video #videoPlayer autoplay muted loop></video>
         <div class="preview_section_video_overlay"></div>
     </div>
-    <article *ngIf="featuredVideo"  [style.backgroundImage]="'url(' + featuredVideo.thumbnail_url + ')'">
+    <article *ngIf="featuredVideo">
         <h1>{{ featuredVideo.title }}</h1>
         <p>{{ featuredVideo.description }}</p>
         <button class="playBtn" (click)="openVideoOverlay()">

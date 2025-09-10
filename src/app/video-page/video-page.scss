@@ -41,6 +41,7 @@ main {
         min-height: 300px;
         z-index: 0;
         overflow: hidden;
+        background-size: cover;
 
         video {
             width: 100%;
@@ -65,7 +66,7 @@ main {
     > article {
         position: relative;
         z-index: 2;
-        height: 400px;
+        width: 440px;
         display: flex;
         gap: 16px;
         flex-direction: column;
@@ -75,8 +76,14 @@ main {
         margin: 20px;
         margin-left: max(48px, calc(50% - 672px));
         margin-right: auto;
-        background-size: cover;
 
+        h1{
+            font-size: 88px;
+            margin-bottom: 8px;
+        }
+        p{
+            font-size: 16px;
+        }
 
         > button {
             padding: 12px 24px;
@@ -230,11 +237,15 @@ main {
     z-index: 1;
     overflow: hidden;
     padding: 0 max(48px, calc(50% - 720px));
-    background: linear-gradient(180deg, rgba(20, 20, 20, 1) 0%, rgba(20, 20, 20, 0.4) 50%, rgba(20, 20, 20, 1) 100%);
+    background: black
 }
 
 .video_list {
     overflow: hidden;
+
+    li{
+        font-size: 22px;
+    }
 
     img {
         height: 150px;
