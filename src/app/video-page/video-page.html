@@ -38,18 +38,49 @@
             </div>
         </section>
     </section>
+<!-- <div class="video-overlay" [style.display]="isVideoOverlayOpen ? 'flex' : 'none'">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <img src="/icons/arrow_back.svg" (click)="closeVideoOverlay()" alt="">
+            <img src="/icons/logo_icon_small.svg" alt="">
+        </div>
+        <div class="video-wrapper">
+            <video #overlayVideo controls autoplay></video>
+        </div>
+        <div class="overlay-controls">
+            <button class="rewind" (click)="rewindVideo(10)">
+                <img src="/icons/replay_10.svg" alt="10 Sekunden zurückspulen">
+            </button>
 
-    <div class="video-overlay" [style.display]="isVideoOverlayOpen ? 'flex' : 'none'">
-        <div class="overlay-content">
-            <div class="overlay-header">
-                <img src="/icons/arrow_back.svg" (click)="closeVideoOverlay()" alt="">
-                <h1>{{ featuredVideo?.title }}</h1>
-                <img src="/icons/logo_icon_small.svg" alt="">
-            </div>
-            <div class="video-wrapper">
-                <video #overlayVideo controls autoplay></video>
-            </div>
+            <button class="rewind" (click)="forwardVideo(10)">
+                <img src="/icons/forward_10.svg" alt="10 Sekunden vorspulen">
+            </button>
+            <h1>{{ featuredVideo?.title }}</h1>
+            <label for="setResolution">Resolution:</label>
+            <select id="setResolution" [ngModel]="currentResolution" (change)="handleResolutionChange($event)">
+                <option value="480p">480p</option>
+                <option value="720p">720p</option>
+                <option value="1080p">1080p</option>
+            </select>
+        </div>
+    </div>
+</div> -->
+<div class="video-overlay" [style.display]="isVideoOverlayOpen ? 'flex' : 'none'">
+    <div class="overlay-content">
+        <div class="overlay-header">
+            <img src="/icons/arrow_back.svg" (click)="closeVideoOverlay()" alt="">
+            <img src="/icons/logo_icon_small.svg" alt="">
+        </div>
+        <div class="video-wrapper">
+            <video #overlayVideo controls autoplay></video>
+            
             <div class="overlay-controls">
+                <button class="rewind" (click)="rewindVideo(10)">
+                    <img src="/icons/replay_10.svg" alt="10 Sekunden zurückspulen">
+                </button>
+                <button class="rewind" (click)="forwardVideo(10)">
+                    <img src="/icons/forward_10.svg" alt="10 Sekunden vorspulen">
+                </button>
                 <label for="setResolution">Resolution:</label>
                 <select id="setResolution" [ngModel]="currentResolution" (change)="handleResolutionChange($event)">
                     <option value="480p">480p</option>
@@ -59,6 +90,7 @@
             </div>
         </div>
     </div>
+</div>
     <app-footer></app-footer>
 </main>
 

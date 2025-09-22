@@ -183,6 +183,7 @@ main {
     overflow: hidden;
     background-color: #000;
     z-index: 5;
+    position: relative;
 
     video {
         width: 100%;
@@ -193,6 +194,25 @@ main {
     }
 }
 
+//---------------------------------------------------------
+
+.overlay-controls {
+    position: absolute; // <-- WICHTIG: Positioniert die Controls über dem Video
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    z-index: 10;
+    justify-content: center;
+}
+//-------------------------------------------------------
 .overlay-controls {
     display: flex;
     align-items: center;
@@ -204,6 +224,21 @@ main {
     color: white;
     z-index: 10;
     justify-content: center;
+    //.-----------------------alternative-----------------
+    //     position: absolute; //
+    // bottom: 20px;
+    // left: 50%;
+    // transform: translateX(-50%);
+    // display: flex;
+    // align-items: center;
+    // gap: 12px;
+    // padding: 16px;
+    // background-color: rgba(0, 0, 0, 0.3);
+    // border-radius: 8px;
+    // border-top: 1px solid rgba(255, 255, 255, 0.1);
+    // color: white;
+    // z-index: 10;
+    // justify-content: center;
 
     select {
         padding: 10px 16px;
@@ -233,6 +268,18 @@ main {
         font-weight: 500;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
     }
+    .rewind {
+    background-color: inherit;
+    width: 45px;
+    height: 45px;
+    border: none;
+    cursor: pointer;
+
+    img {
+        width: 45px;
+        height: 45px;
+    }
+}
 }
 
 .list_section {
@@ -324,6 +371,7 @@ main {
 #overlayTitle {
     animation: fadeOut 5s ease-in-out forwards;
 }
+
 
 @keyframes fadeIn {
     from {

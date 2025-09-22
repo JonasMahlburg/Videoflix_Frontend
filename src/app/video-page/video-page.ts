@@ -180,4 +180,24 @@ export class VideoPageComponent implements OnInit, OnDestroy {
     getSafeUrl(url: string | undefined): SafeResourceUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url || '');
     }
+
+      /**
+   * Spult das Video um die angegebene Anzahl an Sekunden vor.
+   * @param seconds Die Anzahl der Sekunden, die vorgespult werden soll.
+   */
+  forwardVideo(seconds: number): void {
+    if (this.overlayVideo && this.overlayVideo.nativeElement) {
+      this.overlayVideo.nativeElement.currentTime += seconds;
+    }
+  }
+
+  /**
+   * Spult das Video um die angegebene Anzahl an Sekunden zurück.
+   * @param seconds Die Anzahl der Sekunden, die zurückgespult werden soll.
+   */
+  rewindVideo(seconds: number): void {
+    if (this.overlayVideo && this.overlayVideo.nativeElement) {
+      this.overlayVideo.nativeElement.currentTime -= seconds;
+    }
+  }
 }
