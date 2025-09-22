@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 // import { VideoService } from '../services/video.service';
 import { UniqueCategoriesPipe } from '../pipes/unique-categories-pipe';
 import { FilterByCategoryPipe } from '../pipes/filter-by-category-pipe';
+import { Header } from '../shared/header/header';
+import { Footer } from '../shared/footer/footer';
 
 // Schnittstelle ohne die Video-URL-Eigenschaften
 export interface Video {
@@ -25,9 +27,11 @@ export interface Video {
         CommonModule,
         FormsModule, 
         UniqueCategoriesPipe,
-        FilterByCategoryPipe
+        FilterByCategoryPipe,
+        Header,
+        Footer,
     ],
-    templateUrl: './video-page.html',
+    templateUrl: './video-page.html', 
     styleUrls: ['./video-page.scss']
 })
 export class VideoPageComponent implements OnInit, OnDestroy {

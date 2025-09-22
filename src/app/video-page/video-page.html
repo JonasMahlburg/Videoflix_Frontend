@@ -1,4 +1,5 @@
 <main class="w_full d_flex_ss_gl font_white_color">
+    <app-header></app-header>
 <section class="preview_section">
     <div class="preview_section_video" [style.backgroundImage]="'url(' + featuredVideo?.thumbnail_url + ')'">
         <video #videoPlayer autoplay muted loop></video>
@@ -58,4 +59,7 @@
             </div>
         </div>
     </div>
+    <app-footer></app-footer>
 </main>
+
+
