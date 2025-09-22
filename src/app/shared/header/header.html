@@ -1,8 +1,15 @@
 <header>
     <a href="#landing-page"><img src="/icons/logo_icon.svg" alt="Logo"></a>
     
-    <a class="logIn" href="login" rel="noopener noreferrer">LogIn</a>
+    <a 
+      [ngClass]="isLoggedIn ? 'logOutBtn' : 'logInBtn'"
+      [href]="isLoggedIn ? '#' : 'login'" 
+      (click)="onButtonClick()" 
+      rel="noopener noreferrer"
+      class="logIn"
+    >
+        {{ isLoggedIn ? 'Logout' : 'Login' }}
+    </a>
 </header>
-
 
 <!-- target="_blank"  -->
