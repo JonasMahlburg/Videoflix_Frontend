@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms'; // NgForm für die Formularvalidierung importieren
-import { HttpClient } from '@angular/common/http'; // HttpClient importieren
+import { HttpClient } from '@angular/common/http';
+import { Footer } from "../shared/footer/footer";
+import { Header } from "../shared/header/header"; // HttpClient importieren
 
 @Component({
   selector: 'app-landing-page',
   standalone: true,           
-  imports: [CommonModule, FormsModule], 
+  imports: [CommonModule, FormsModule, Footer, Header], 
   templateUrl: './landing-page.html',
   styleUrls: ['./landing-page.scss']  
 })

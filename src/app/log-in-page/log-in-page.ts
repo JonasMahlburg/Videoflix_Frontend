@@ -3,11 +3,13 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Footer } from '../shared/footer/footer';
+import { Header } from '../shared/header/header';
 
 @Component({
   selector: 'app-log-in-page',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, Footer, Header],
   templateUrl: './log-in-page.html',
   styleUrl: './log-in-page.scss'
 })

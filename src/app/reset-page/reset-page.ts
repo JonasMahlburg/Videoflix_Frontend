@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Header } from "../shared/header/header";
+import { Footer } from "../shared/footer/footer";
 
 @Component({
   selector: 'app-reset-page',
-  imports: [FormsModule],
+  imports: [FormsModule, Header, Footer],
   templateUrl: './reset-page.html',
   styleUrl: './reset-page.scss'
 })

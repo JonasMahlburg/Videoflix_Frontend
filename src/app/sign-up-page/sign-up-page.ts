@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
+import { Footer } from "../shared/footer/footer";
+import { Header } from "../shared/header/header";
 
 @Component({
   selector: 'app-sign-up-page',
-  imports: [],
+  imports: [Footer, Header],
   templateUrl: './sign-up-page.html',
   styleUrl: './sign-up-page.scss'
 })
