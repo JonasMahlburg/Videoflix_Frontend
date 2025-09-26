@@ -101,6 +101,54 @@ main {
 }
 
 .video-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .overlay-content {
+    background: #181818;
+    border-radius: 12px;
+    padding: 24px;
+    min-width: 320px;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .overlay-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+
+    img {
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      transition: filter 0.2s;
+      &:hover {
+        filter: brightness(1.3);
+      }
+    }
+  }
+
+  .video-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.video-overlay {
     display: none;
     position: fixed;
     top: 0;
@@ -192,94 +240,6 @@ main {
         background-color: black;
         border-radius: 8px;
     }
-}
-
-//---------------------------------------------------------
-
-.overlay-controls {
-    position: absolute; // <-- WICHTIG: Positioniert die Controls über dem Video
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    z-index: 10;
-    justify-content: center;
-}
-//-------------------------------------------------------
-.overlay-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 8px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    z-index: 10;
-    justify-content: center;
-    //.-----------------------alternative-----------------
-    //     position: absolute; //
-    // bottom: 20px;
-    // left: 50%;
-    // transform: translateX(-50%);
-    // display: flex;
-    // align-items: center;
-    // gap: 12px;
-    // padding: 16px;
-    // background-color: rgba(0, 0, 0, 0.3);
-    // border-radius: 8px;
-    // border-top: 1px solid rgba(255, 255, 255, 0.1);
-    // color: white;
-    // z-index: 10;
-    // justify-content: center;
-
-    select {
-        padding: 10px 16px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 6px;
-        background-color: rgba(40, 40, 40, 0.9);
-        color: white;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        z-index: 10;
-
-        &:hover {
-            border-color: rgba(255, 255, 255, 0.5);
-            background-color: rgba(60, 60, 60, 0.9);
-        }
-
-        &:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
-        }
-    }
-
-    label {
-        font-size: 1rem;
-        font-weight: 500;
-        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    }
-    .rewind {
-    background-color: inherit;
-    width: 45px;
-    height: 45px;
-    border: none;
-    cursor: pointer;
-
-    img {
-        width: 45px;
-        height: 45px;
-    }
-}
 }
 
 .list_section {
@@ -463,4 +423,12 @@ main {
         font-size: 1.2rem;
         padding: 8px 12px;
     }
+}
+
+.overlay-controls, .overlay-header {
+  transition: opacity 0.3s;
+}
+.overlay-controls.ng-animating, .overlay-header.ng-animating {
+  opacity: 0;
+  pointer-events: none;
 }

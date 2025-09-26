@@ -464,3 +464,9 @@ main {
         padding: 8px 12px;
     }
 }
+.vjs-control-bar,
+.vjs-big-play-button,
+.vjs-error-display,
+.vjs-poster {
+  display: none !important;
+}

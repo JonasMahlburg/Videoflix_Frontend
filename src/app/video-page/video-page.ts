@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import Hls from 'hls.js';
 import { ActivatedRoute } from '@angular/router';
-// import { VideoService } from '../services/video.service';
+import { VideoService } from '../services/video.service';
 import { UniqueCategoriesPipe } from '../pipes/unique-categories-pipe';
 import { FilterByCategoryPipe } from '../pipes/filter-by-category-pipe';
 import { Header } from '../shared/header/header';
 import { Footer } from '../shared/footer/footer';
+import { VjsPlayer } from '../vjs-player/vjs-player';
 
 // Schnittstelle ohne die Video-URL-Eigenschaften
 export interface Video {
@@ -30,23 +30,25 @@ export interface Video {
         FilterByCategoryPipe,
         Header,
         Footer,
+        VjsPlayer,
     ],
     templateUrl: './video-page.html', 
     styleUrls: ['./video-page.scss']
 })
-export class VideoPageComponent implements OnInit, OnDestroy {
-    @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
-    @ViewChild('overlayVideo') overlayVideo!: ElementRef<HTMLVideoElement>;
-    
+export class VideoPageComponent implements OnInit {
     videos: Video[] = [];
     latestVideos: Video[] = [];
     featuredVideo: Video | null = null;
     currentVideoId: number | null = null;
     currentResolution: string = '480p';
     isVideoOverlayOpen: boolean = false;
+    showOverlayControls = true;
+    private overlayControlsTimeout: any;
 
-    private hls: Hls | null = null;
-    private overlayHls: Hls | null = null;
+    mainPlayerOptions: any;
+    overlayPlayerOptions: any;
+
+    @ViewChild('overlayVjs') overlayVjsPlayer?: VjsPlayer;
 
     constructor(
         private sanitizer: DomSanitizer,
@@ -65,88 +67,35 @@ export class VideoPageComponent implements OnInit, OnDestroy {
         });
     }
 
-    ngOnDestroy(): void {
-        this.destroyHlsPlayers();
-    }
-
     selectVideo(id: number): void {
         this.currentVideoId = id;
         this.featuredVideo = this.videos.find(v => v.id === id) || null;
-    }
-
-    playVideoInMainPlayer(id: number, resolution: string): void {
-        if (this.hls) {
-            this.hls.destroy();
+        if (this.featuredVideo) {
+            this.mainPlayerOptions = this.getVideoJsOptions(this.featuredVideo, this.currentResolution);
+            // Overlay schließen, falls offen
+            this.isVideoOverlayOpen = false;
         }
-        
-        const videoElement = this.videoPlayer.nativeElement;
-        const video = this.videos.find(v => v.id === id);
-        if (!video) {
-            console.error('Video or URL not found');
-            return;
-        }
-
-        const videoUrl = this.getBestResolutionUrl(video);
-        
-        this.hls = new Hls({
-            startLevel: -1, 
-            startFragPrefetch: true,
-            fragLoadingTimeOut: 10000,
-            fragLoadingMaxRetry: 3,
-        });
-        this.hls.loadSource(videoUrl);
-        this.hls.attachMedia(videoElement);
-        
-        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
-             videoElement.play().catch(e => console.log("Play failed:", e));
-        });
     }
 
     openVideoOverlay(): void {
         this.isVideoOverlayOpen = true;
         document.body.classList.add('overlay-open');
-        this.loadVideoInOverlay(this.currentVideoId, this.currentResolution);
+        this.showControlsTemporarily();
+        if (this.featuredVideo) {
+            this.overlayPlayerOptions = this.getVideoJsOptions(this.featuredVideo, this.currentResolution);
+        }
     }
     
     closeVideoOverlay(): void {
         this.isVideoOverlayOpen = false;
         document.body.classList.remove('overlay-open');
-        if (this.overlayHls) {
-            this.overlayHls.destroy();
-            this.overlayHls = null;
-        }
     }
 
     handleResolutionChange(event: any): void {
         this.currentResolution = event.target.value;
-        this.loadVideoInOverlay(this.currentVideoId, this.currentResolution);
-    }
-
-    loadVideoInOverlay(id: number | null, resolution: string): void {
-        if (!id) return;
-        
-        if (this.overlayHls) {
-            this.overlayHls.destroy();
+        if (this.featuredVideo) {
+            this.overlayPlayerOptions = this.getVideoJsOptions(this.featuredVideo, this.currentResolution);
         }
-
-        const videoElement = this.overlayVideo.nativeElement;
-        const video = this.videos.find(v => v.id === id);
-        if (!video) return;
-
-        const videoUrl = this.getBestResolutionUrl(video, resolution);
-
-        this.overlayHls = new Hls({
-            startLevel: -1, 
-            startFragPrefetch: true,
-            fragLoadingTimeOut: 10000,
-            fragLoadingMaxRetry: 3,
-        });
-        this.overlayHls.loadSource(videoUrl);
-        this.overlayHls.attachMedia(videoElement);
-        
-        this.overlayHls.on(Hls.Events.MANIFEST_PARSED, () => {
-             videoElement.play().catch(e => console.log("Play failed:", e));
-        });
     }
 
     private getNewestVideos(): void {
@@ -166,17 +115,6 @@ export class VideoPageComponent implements OnInit, OnDestroy {
         return `${baseUrl}${path}`;
     }
 
-    private destroyHlsPlayers(): void {
-        if (this.hls) {
-            this.hls.destroy();
-            this.hls = null;
-        }
-        if (this.overlayHls) {
-            this.overlayHls.destroy();
-            this.overlayHls = null;
-        }
-    }
-
     getSafeUrl(url: string | undefined): SafeResourceUrl {
         return this.sanitizer.bypassSecurityTrustResourceUrl(url || '');
     }
@@ -186,8 +124,10 @@ export class VideoPageComponent implements OnInit, OnDestroy {
    * @param seconds Die Anzahl der Sekunden, die vorgespult werden soll.
    */
   forwardVideo(seconds: number): void {
-    if (this.overlayVideo && this.overlayVideo.nativeElement) {
-      this.overlayVideo.nativeElement.currentTime += seconds;
+    const player = this.overlayVjsPlayer?.player;
+    if (player && typeof player.currentTime === 'function') {
+      const current = player.currentTime() ?? 0;
+      player.currentTime(current + seconds);
     }
   }
 
@@ -196,8 +136,41 @@ export class VideoPageComponent implements OnInit, OnDestroy {
    * @param seconds Die Anzahl der Sekunden, die zurückgespult werden soll.
    */
   rewindVideo(seconds: number): void {
-    if (this.overlayVideo && this.overlayVideo.nativeElement) {
-      this.overlayVideo.nativeElement.currentTime -= seconds;
+    const player = this.overlayVjsPlayer?.player;
+    if (player && typeof player.currentTime === 'function') {
+      const current = player.currentTime() ?? 0;
+      player.currentTime(Math.max(0, current - seconds));
     }
+  }
+
+  getVideoJsOptions(video: Video, resolution: string) {
+    return {
+      controls: false,
+      autoplay: true,
+      preload: 'auto',
+      sources: [{
+        src: this.getBestResolutionUrl(video, resolution),
+        type: 'application/x-mpegURL'
+      }]
+    };
+  }
+
+  toggleFullscreen(): void {
+    const player = this.overlayVjsPlayer?.player;
+    if (player) {
+      if (player.isFullscreen()) {
+        player.exitFullscreen();
+      } else if (typeof player.requestFullscreen === 'function') {
+        player.requestFullscreen();
+      }
+    }
+  }
+
+  showControlsTemporarily() {
+    this.showOverlayControls = true;
+    clearTimeout(this.overlayControlsTimeout);
+    this.overlayControlsTimeout = setTimeout(() => {
+      this.showOverlayControls = false;
+    }, 3000); // 3 Sekunden sichtbar
   }
 }
